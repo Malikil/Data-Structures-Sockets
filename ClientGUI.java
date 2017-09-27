@@ -10,7 +10,7 @@ import javax.swing.*;
 
 import java.util.*;
 
-public class clientGUI extends JFrame {
+public class ClientGUI extends JFrame {
 
 	private JLabel ipLabel = new JLabel("IP");
 	private JLabel portLabel = new JLabel("PORT");
@@ -25,9 +25,9 @@ public class clientGUI extends JFrame {
 	private JTextArea viewStatus = new JTextArea();
 	private JScrollPane scroller = new JScrollPane(viewStatus, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	private JScrollPane scroller2 = new JScrollPane(viewDisplay, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-	MyClient mc = null; 
+	MyClient mc = null;
 
-	public clientGUI()
+	public ClientGUI()
 	{
 		setSize(1000,700);
 		setLayout(null);
