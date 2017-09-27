@@ -9,42 +9,43 @@ import java.io.IOException;
 
 public class MyServer
 {
-	
 	public static void main(String[] args) 
 	{
-		
 		ServerSocket serverSock = null;
 		try
 		{
 			final int PORT = 8000;
-			System.out.println("Waiting for a connection on port " +PORT);
+			System.out.println("Waiting for a connection on port " + PORT);
 			serverSock = new ServerSocket(PORT);
 			Socket connectionSock;
 			
+			ArrayList<Thread> clientList = new ArrayList<>();
+			ClientHandler ch;
 			int id = 0;
-			Thread t;
-			ClientHandler ch ; 
-			while(true) {
-				
+			while(true)
+			{
 				System.out.println("Waiting for a client");
 				connectionSock = serverSock.accept();
-				id++;
-				System.out.println("Server welcomes client # : " + id);
+				System.out.println("Server welcomes client # : " + (++id));
 				ch = new ClientHandler(connectionSock,id);
-				t = new Thread(ch);
-				t.start();
-			}		
-
+				clientList.add(new Thread(ch));
+				clientList.get(clientList.size() - 1).start();
+			}
 		}
 		catch (IOException e)
 		{
 			System.out.println(e.getMessage());
-		} finally{
+		}
+		finally
+		{
 			System.out.println("Bye");
 			if (serverSock != null)
-				try {
+				try
+				{
 					serverSock.close() ;
-				} catch (IOException e) {
+				}
+				catch (IOException e)
+				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
