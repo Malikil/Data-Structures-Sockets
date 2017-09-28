@@ -6,15 +6,17 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable
 {
+	private MyServer parentServer;
 	private Socket socket;
     private int id;
     private PrintWriter out;
     private BufferedReader in;
 
-    public ClientHandler(Socket socket, int id)
+    public ClientHandler(Socket socket, int id, MyServer server)
     {
         this.socket = socket;
         this.id = id;
+        parentServer = server;
     }
     
     public void sendMessage(String message)
@@ -47,7 +49,8 @@ public class ClientHandler implements Runnable
                 if (msg == null || msg.equals("@"))
                     break;
                 
-                System.out.println("Message from client #" + id + ", [" + msg + "]");
+                parentServer.messageReceived(msg, this);
+                // System.out.println("Message from client #" + id + ", [" + msg + "]");
             }
         }
 		catch (IOException e)

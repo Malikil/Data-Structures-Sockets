@@ -24,11 +24,22 @@ public class MyServer
 		clientList.add(client);
 	}
 	
-	public void pushMessage(String message, ClientHandler reciever)
+	public void messageReceived(String message, ClientHandler receiver)
 	{
+		if (message.charAt(0) == '#')
+			try
+			{
+				// int num = Integer.parseInt(message.substring(1));
+				// TODO Add num to list in the correct spot and display it on the list 
+			}
+			catch (NumberFormatException ex)
+			{
+				// Nothing special, just send the message
+			}
+		
 		for (ClientHandler client : clientList)
 		{
-			if (client != reciever)
+			if (client != receiver)
 				client.sendMessage(message);
 		}
 	}
@@ -52,9 +63,11 @@ public class MyServer
 				System.out.println("Waiting for a client");
 				connectionSock = serverSock.accept();
 				System.out.println("Server welcomes client # : " + (++id));
-				ch = new ClientHandler(connectionSock, id);
+				ch = new ClientHandler(connectionSock, id, server);
+				server.addClient(ch);
 				Thread t = new Thread(ch);
 				t.start();
+				// TODO display clients in gui
 			}
 		}
 		catch (IOException e)
@@ -71,7 +84,6 @@ public class MyServer
 				}
 				catch (IOException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
