@@ -9,17 +9,42 @@ import java.io.IOException;
 
 public class MyServer
 {
+	ArrayList<ClientHandler> clientList;
+	ServerGUI gui;
+	
+	public MyServer()
+	{
+		clientList = new ArrayList<>();
+		gui = new ServerGUI();
+		gui.setVisible(true);
+	}
+	
+	public void addClient(ClientHandler client)
+	{
+		clientList.add(client);
+	}
+	
+	public void pushMessage(String message, ClientHandler reciever)
+	{
+		for (ClientHandler client : clientList)
+		{
+			if (client != reciever)
+				client.sendMessage(message);
+		}
+	}
+	
 	public static void main(String[] args) 
 	{
+		MyServer server = new MyServer();
+		
 		ServerSocket serverSock = null;
 		try
 		{
 			final int PORT = 8000;
 			System.out.println("Waiting for a connection on port " + PORT);
 			serverSock = new ServerSocket(PORT);
-			Socket connectionSock;
 			
-			Sender clientList = new Sender();
+			Socket connectionSock;
 			ClientHandler ch;
 			int id = 0;
 			while(true)
@@ -27,8 +52,7 @@ public class MyServer
 				System.out.println("Waiting for a client");
 				connectionSock = serverSock.accept();
 				System.out.println("Server welcomes client # : " + (++id));
-				clientList.addClient(connectionSock);
-				ch = new ClientHandler(connectionSock, id, clientList);
+				ch = new ClientHandler(connectionSock, id);
 				Thread t = new Thread(ch);
 				t.start();
 			}

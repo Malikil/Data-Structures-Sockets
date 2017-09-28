@@ -8,13 +8,18 @@ public class ClientHandler implements Runnable
 {
 	private Socket socket;
     private int id;
-    private Sender clientList;
+    private PrintWriter out;
+    private BufferedReader in;
 
-    public ClientHandler(Socket socket, int id, Sender list)
+    public ClientHandler(Socket socket, int id)
     {
         this.socket = socket;
         this.id = id;
-        clientList = list;
+    }
+    
+    public void sendMessage(String message)
+    {
+    	out.println(message);
     }
 
 	@Override
@@ -24,10 +29,10 @@ public class ClientHandler implements Runnable
 		try
 		{
 			InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-            BufferedReader in = new BufferedReader(isr);
+            in = new BufferedReader(isr);
            
             // (outputstream, autoflush)
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out = new PrintWriter(socket.getOutputStream(), true);
 
             // Send a welcome message to the client.
             out.println("Welcome Client # " + id);
@@ -42,7 +47,6 @@ public class ClientHandler implements Runnable
                 if (msg == null || msg.equals("@"))
                     break;
                 
-                clientList.sendMessage(msg);
                 System.out.println("Message from client #" + id + ", [" + msg + "]");
             }
         }
