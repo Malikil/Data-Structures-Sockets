@@ -4,21 +4,23 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientHandler implements Runnable {
-
+public class ClientHandler implements Runnable
+{
 	private Socket socket;
     private int id;
 
-    public ClientHandler(Socket socket, int id) {
+    public ClientHandler(Socket socket, int id)
+    {
         this.socket = socket;
         this.id = id;
-        
     }
 
 	@Override
-	public void run() {
+	public void run()
+	{
 		System.out.println("Building connection with client# " + id + " at " + socket);
-		try {
+		try
+		{
 			InputStreamReader isr = new InputStreamReader(socket.getInputStream());
             BufferedReader in = new BufferedReader(isr);
            
@@ -32,25 +34,30 @@ public class ClientHandler implements Runnable {
 
             String msg;
             // waiting for client to send message
-            while (true) {
+            while (true)
+            {
                 msg = in.readLine();
-                if (msg == null || msg.equals("@")) {
+                if (msg == null || msg.equals("@"))
                     break;
-                }
+                
                 System.out.println("Message from client #" + id + ", [" + msg + "]");
             }
-        } catch (IOException e) {
+        }
+		catch (IOException e)
+		{
             System.out.println("Error client# " + id + ": " + e);
-        } finally {
-            try {
+        }
+		finally
+		{
+            try
+            {
                 socket.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 System.out.println("Client # :" + id + " ... Couldn't close a socket");
             }
             System.out.println("client# " + id + " left");
         }
-		
-		
 	}
-
 }
