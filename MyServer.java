@@ -19,7 +19,7 @@ public class MyServer
 			serverSock = new ServerSocket(PORT);
 			Socket connectionSock;
 			
-			ArrayList<Socket> clientList = new ArrayList<>();
+			Sender clientList = new Sender();
 			ClientHandler ch;
 			int id = 0;
 			while(true)
@@ -27,8 +27,8 @@ public class MyServer
 				System.out.println("Waiting for a client");
 				connectionSock = serverSock.accept();
 				System.out.println("Server welcomes client # : " + (++id));
-				clientList.add(connectionSock);
-				ch = new ClientHandler(connectionSock,id);
+				clientList.addClient(connectionSock);
+				ch = new ClientHandler(connectionSock, id, clientList);
 				Thread t = new Thread(ch);
 				t.start();
 			}

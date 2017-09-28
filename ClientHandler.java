@@ -8,11 +8,13 @@ public class ClientHandler implements Runnable
 {
 	private Socket socket;
     private int id;
+    private Sender clientList;
 
-    public ClientHandler(Socket socket, int id)
+    public ClientHandler(Socket socket, int id, Sender list)
     {
         this.socket = socket;
         this.id = id;
+        clientList = list;
     }
 
 	@Override
@@ -40,6 +42,7 @@ public class ClientHandler implements Runnable
                 if (msg == null || msg.equals("@"))
                     break;
                 
+                clientList.sendMessage(msg);
                 System.out.println("Message from client #" + id + ", [" + msg + "]");
             }
         }
