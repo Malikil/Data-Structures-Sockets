@@ -12,14 +12,14 @@ public class ServerGUI extends JFrame
 	
 	private JLabel serverLogLabel, sortedListLabel, clientListLabel;
 	private JTextArea serverLogArea;
-	private JList sortedList, clientList;
+	private JList<String> sortedList, clientList;
 	private JScrollPane logPane, listPane, clientPane;
 	
-	public static void main(String[] arg)
+	/*public static void main(String[] arg)
 	{
 		ServerGUI serv = new ServerGUI();
 		serv.setVisible(true);
-	}
+	}*/ // Debug main for displaying form
 	
 	ServerGUI()
 	{
@@ -70,17 +70,37 @@ public class ServerGUI extends JFrame
 		logPane = new JScrollPane(serverLogArea);
 		bot.add(logPane);
 		
-		sortedList = new JList();
+		sortedList = new JList<>();
 		listPane = new JScrollPane(sortedList);
 		bot.add(listPane);
 		
-		clientList = new JList();
+		clientList = new JList<>();
 		clientPane = new JScrollPane(clientList);
 		bot.add(clientPane);
 	}
 	
 	public void setIP(String ip)
 	{
-		
+		ipLabel.setText(ip);
+	}
+	
+	public void setPort(String port)
+	{
+		portLabel.setText(port);
+	}
+	
+	public void setSortedList(String[] list)
+	{
+		sortedList.setListData(list);
+	}
+	
+	public void setClientList(String[] clients)
+	{
+		clientList.setListData(clients);
+	}
+	
+	public void addLog(String log)
+	{
+		serverLogArea.append(log + "\n");
 	}
 }
