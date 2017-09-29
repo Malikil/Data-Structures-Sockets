@@ -36,15 +36,19 @@ public class MyServer
 			{
 				// Nothing special, just send the message
 			}
+		else
+			System.out.println(message);
 		
 		for (ClientHandler client : clientList)
 		{
 			if (client != receiver)
 				client.sendMessage(message);
+			else
+				client.sendMessage("Message sent.");
 		}
 	}
 	
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 		MyServer server = new MyServer();
 		
