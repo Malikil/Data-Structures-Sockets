@@ -23,6 +23,14 @@ public class ClientHandler implements Runnable
     {
     	out.println(message);
     }
+    
+    public void sendList(int[] list)
+    {
+    	String message = "#";
+    	for (int n : list)
+    		message += ("," + n);
+    	out.print(message);
+    }
 
 	@Override
 	public void run()

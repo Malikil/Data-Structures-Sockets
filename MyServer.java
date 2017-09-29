@@ -29,26 +29,25 @@ public class MyServer
 		if (message.charAt(0) == '#')
 			try
 			{
-				// int num = Integer.parseInt(message.substring(1));
-				// TODO Add num to list in the correct spot and display it on the list 
+				int num = Integer.parseInt(message.substring(1));
+				int[] newList = { num }; // gui.updateList(num);
+				for (ClientHandler client : clientList)
+					client.sendList(newList);
 			}
 			catch (NumberFormatException ex)
 			{
-				// Nothing special, just send the message
+				// Send the message with a \ at the front so the client doesn't get confused
+				message = "\\" + message;
 			}
-		else
-			System.out.println(message);
 		
 		for (ClientHandler client : clientList)
 		{
 			if (client != receiver)
 				client.sendMessage(message);
-			else
-				client.sendMessage("Message sent.");
 		}
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) 
 	{
 		MyServer server = new MyServer();
 		
