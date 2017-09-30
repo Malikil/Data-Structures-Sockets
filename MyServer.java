@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class MyServer
 {
-	ArrayList<ClientHandler> clientList;
-	ServerGUI gui;
+	private ArrayList<ClientHandler> clientList;
+	private ServerGUI gui;
 	
 	public MyServer()
 	{
@@ -22,6 +22,11 @@ public class MyServer
 	public void addClient(ClientHandler client)
 	{
 		clientList.add(client);
+	}
+	
+	public void removeClient(ClientHandler client)
+	{
+		clientList.remove(client);
 	}
 	
 	public void messageReceived(String message, ClientHandler receiver)
@@ -47,7 +52,7 @@ public class MyServer
 		}
 	}
 	
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 		MyServer server = new MyServer();
 		

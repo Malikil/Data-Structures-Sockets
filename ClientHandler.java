@@ -55,7 +55,10 @@ public class ClientHandler implements Runnable
             {
                 msg = in.readLine();
                 if (msg == null || msg.equals("@"))
+                {
+                	parentServer.removeClient(this);
                     break;
+                }
                 
                 parentServer.messageReceived(msg, this);
                 // System.out.println("Message from client #" + id + ", [" + msg + "]");
