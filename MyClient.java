@@ -23,14 +23,14 @@ public class MyClient extends Thread
 	public MyClient(String host, String vport, JTextArea a, JList<String> b) throws UnknownHostException, IOException {
 		String hostname = host;
 		int port = Integer.parseInt(vport);
-
-		System.out.println("Connecting to server on port " + port);
+		v = a; //Assigns passed values for use in run() method.
+		z = b;
+		v.append("Connecting to server on port " + port);
 		connectionSock = new Socket(hostname, port);
 		InputStreamReader isr = new InputStreamReader(connectionSock.getInputStream());
 		serverInput = new BufferedReader(isr);
 		pw = new PrintWriter(connectionSock.getOutputStream(),true);
-		v = a; //Assigns passed values for use in run() method.
-		z = b;
+		
 	
 	}
 	
