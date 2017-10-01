@@ -1,14 +1,11 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 import javax.swing.*;
 
-import java.util.*;
 
 public class ClientGUI extends JFrame {
 
@@ -21,7 +18,7 @@ public class ClientGUI extends JFrame {
 	private JTextField ipInput = new JTextField();
 	private JTextField portInput = new JTextField();
 	private JTextField sendInput = new JTextField();
-	private JList viewDisplay = new JList();
+	private JList<String> viewDisplay = new JList<String>();
 	private JTextArea viewStatus = new JTextArea();
 	private JScrollPane scroller = new JScrollPane(viewStatus, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	private JScrollPane scroller2 = new JScrollPane(viewDisplay, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -65,10 +62,11 @@ public class ClientGUI extends JFrame {
 			String Port = portInput.getText();
 			
 			try {
-				mc = new MyClient(IP, Port);
+				mc = new MyClient(IP, Port, viewStatus, viewDisplay); //Passes JTextArea and JList
 				viewStatus.append("Connection made \r\n");
 				mc.start();
 				mc.sendData("Hello");
+				
 				
 				
 			} catch (UnknownHostException e1) {
@@ -84,6 +82,9 @@ public class ClientGUI extends JFrame {
 			}
 			
 			
+			
+			
+			
 		}
 	}
 	
@@ -92,8 +93,7 @@ public class ClientGUI extends JFrame {
 		public void actionPerformed(ActionEvent e)
 		{
 			
-				String userinput = sendInput.getText();
-				if (userinput.equals("@"))
+				String userinput = sendInput.getText(); //We don't need to check for '@' anymore.
 				mc.sendData(userinput);
 			
 		}
