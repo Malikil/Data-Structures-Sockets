@@ -77,6 +77,8 @@ public class MyClient extends Thread
 			}
 		} catch (Exception ex) {
 			ok_connect = false;
+			System.out.println(ex);
+			System.out.println("Disconnected from server");
 		}
 	}
 }
