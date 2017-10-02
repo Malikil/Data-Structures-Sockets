@@ -9,17 +9,61 @@ import java.io.IOException;
 
 public class MyServer
 {
-	public static void main(String[] args) 
+	private ArrayList<ClientHandler> clientList;
+	private ServerGUI gui;
+	
+	public MyServer()
 	{
+		clientList = new ArrayList<>();
+		gui = new ServerGUI();
+		gui.setVisible(true);
+	}
+	
+	public void addClient(ClientHandler client)
+	{
+		clientList.add(client);
+	}
+	
+	public void removeClient(ClientHandler client)
+	{
+		clientList.remove(client);
+	}
+	
+	public void messageReceived(String message, ClientHandler receiver)
+	{
+		if (message.charAt(0) == '#')
+			try
+			{
+				int num = Integer.parseInt(message.substring(1));
+				int[] newList = { num }; // gui.updateList(num);
+				for (ClientHandler client : clientList)
+					client.sendList(newList);
+			}
+			catch (NumberFormatException ex)
+			{
+				// Send the message with a \ at the front so the client doesn't get confused
+				message = "\\" + message;
+			}
+		
+		for (ClientHandler client : clientList)
+		{
+			if (client != receiver)
+				client.sendMessage(message);
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		MyServer server = new MyServer();
+		
 		ServerSocket serverSock = null;
 		try
 		{
 			final int PORT = 8000;
 			System.out.println("Waiting for a connection on port " + PORT);
 			serverSock = new ServerSocket(PORT);
-			Socket connectionSock;
 			
-			ArrayList<Thread> clientList = new ArrayList<>();
+			Socket connectionSock;
 			ClientHandler ch;
 			int id = 0;
 			while(true)
@@ -27,9 +71,11 @@ public class MyServer
 				System.out.println("Waiting for a client");
 				connectionSock = serverSock.accept();
 				System.out.println("Server welcomes client # : " + (++id));
-				ch = new ClientHandler(connectionSock,id);
-				clientList.add(new Thread(ch));
-				clientList.get(clientList.size() - 1).start();
+				ch = new ClientHandler(connectionSock, id, server);
+				server.addClient(ch);
+				Thread t = new Thread(ch);
+				t.start();
+				// TODO display clients in gui
 			}
 		}
 		catch (IOException e)
@@ -46,7 +92,6 @@ public class MyServer
 				}
 				catch (IOException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
