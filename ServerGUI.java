@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class ServerGUI extends JFrame
@@ -10,11 +12,12 @@ public class ServerGUI extends JFrame
 	private JLabel serverLogLabel, sortedListLabel, clientListLabel;
 	//Bot
 	private JTextArea serverLogArea;
-	private JList sortedList, clientList;
+	private JList<String> sortedListDisplay, clientList;
 	private JScrollPane logPane, listPane, clientPane;
 	//Other
 	private JLabel broadcastLabel;
 	private JTextField broadcastField;
+	private ArrayList<Integer> sortedList;
 	
 	public ServerGUI()
 	{
@@ -58,11 +61,11 @@ public class ServerGUI extends JFrame
 		logPane = new JScrollPane(serverLogArea);
 		attach(logPane,10,75,500,500);
 		
-		sortedList = new JList();
-		listPane = new JScrollPane(sortedList);
+		sortedListDisplay = new JList<>();
+		listPane = new JScrollPane(sortedListDisplay);
 		attach(listPane,525,75,100,500);
 		
-		clientList = new JList();
+		clientList = new JList<>();
 		clientPane = new JScrollPane(clientList);
 		attach(clientPane,800,75,150,500);
 		
@@ -74,6 +77,8 @@ public class ServerGUI extends JFrame
 		broadcastField = new JTextField();
 		attach(broadcastField,10,600,500,20);
 		
+		// ========== MISC VARIABLES ==========
+		sortedList = new ArrayList<>();
 	}
 	
 	public void attach(Component c, int x, int y, int w, int h)
@@ -86,10 +91,37 @@ public class ServerGUI extends JFrame
 	{
 		ServerGUI serv = new ServerGUI();
 		serv.setVisible(true);
-	}
+	} // Probably safe to remove this completely now
 	
 	public void setIP(String ip)
 	{
-		
+		ipField.setText(ip);
+	}
+	
+	public void setPort(String port)
+	{
+		portField.setText(port);
+	}
+	
+	public void addLog(String log)
+	{
+		serverLogArea.append(log + "\n");
+	}
+	
+	public Integer[] addListItem(int num)
+	{
+		for (int i = 0; i < sortedList.size(); i++)
+		{
+			if (sortedList.get(i).intValue() > num)
+			{
+				sortedList.add(i, new Integer(num));
+				return (Integer[])sortedList.toArray();
+			}
+		}
+		// If this point is reached, the number should be added to the end of
+		// the ArrayList because it's either empty or the number is bigger than
+		// the last value.
+		sortedList.add(num);
+		return (Integer[])sortedList.toArray();
 	}
 }
