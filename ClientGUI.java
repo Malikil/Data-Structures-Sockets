@@ -18,6 +18,7 @@ public class ClientGUI extends JFrame
 	private JLabel portLabel = new JLabel("PORT");
 	private JLabel statusLabel = new JLabel("CHAT LOG");
 	private JLabel listLabel = new JLabel("LIST");
+	private JLabel usersLabel = new JLabel("ONLINE NOW");
 	private JButton connectButton = new JButton("Connect");
 	private JButton sendButton = new JButton("Send");
 	private JTextField ipInput = new JTextField();
@@ -27,6 +28,8 @@ public class ClientGUI extends JFrame
 	private JTextArea viewStatus = new JTextArea();
 	private JScrollPane scroller = new JScrollPane(viewStatus, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	private JScrollPane scroller2 = new JScrollPane(viewDisplay, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	private JList<String> clientList = new JList<String>();
+	private JScrollPane clientPane = new JScrollPane(clientList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	MyClient mc = null;
 
 	public ClientGUI()
@@ -42,11 +45,13 @@ public class ClientGUI extends JFrame
 	    attach(connectButton, 760,10, 200,30);
 	    connectButton.addActionListener(new connectButtonListener(this));
 	    attach(statusLabel, 90,50, 80,30);
-	    attach(scroller, 80, 90, 200, 450);
+	    attach(scroller, 80, 90, 305, 450);
 	    attach(listLabel, 450,50, 40,30);
+	    attach(usersLabel, 760,50, 90,30);
 	    attach(scroller2, 450, 90, 200, 450);
 	    attach(sendInput, 80, 570, 580, 30);
 	    attach(sendButton, 760,570, 200,30);
+	    attach(clientPane, 760, 90, 200, 450);
 	    sendButton.addActionListener(new sendButtonListener());
 	}
 	
