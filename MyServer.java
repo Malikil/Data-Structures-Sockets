@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class MyServer
 {
-	ArrayList<ClientHandler> clientList;
-	ServerGUI gui;
+	private ArrayList<ClientHandler> clientList;
+	private ServerGUI gui;
 	
 	public MyServer()
 	{
@@ -24,27 +24,31 @@ public class MyServer
 		clientList.add(client);
 	}
 	
+	public void removeClient(ClientHandler client)
+	{
+		clientList.remove(client);
+	}
+	
 	public void messageReceived(String message, ClientHandler receiver)
 	{
 		if (message.charAt(0) == '#')
 			try
 			{
-				// int num = Integer.parseInt(message.substring(1));
-				// TODO Add num to list in the correct spot and display it on the list 
+				int num = Integer.parseInt(message.substring(1));
+				int[] newList = { num }; // gui.updateList(num);
+				for (ClientHandler client : clientList)
+					client.sendList(newList);
 			}
 			catch (NumberFormatException ex)
 			{
-				// Nothing special, just send the message
+				// Send the message with a \ at the front so the client doesn't get confused
+				message = "\\" + message;
 			}
-		else
-			System.out.println(message);
 		
 		for (ClientHandler client : clientList)
 		{
 			if (client != receiver)
 				client.sendMessage(message);
-			else
-				client.sendMessage("Message sent.");
 		}
 	}
 	

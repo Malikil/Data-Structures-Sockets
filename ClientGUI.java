@@ -112,6 +112,7 @@ public class ClientGUI extends JFrame
 			
 				String userinput = sendInput.getText(); //We don't need to check for '@' anymore.
 				mc.sendData(userinput);
+				sendInput.setText("");
 			
 		}
 	}
