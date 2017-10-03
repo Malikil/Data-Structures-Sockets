@@ -33,7 +33,6 @@ public class MyServer
 	
 	public void messageReceived(String message, ClientHandler receiver)
 	{
-		addLog(receiver.toString() + ": " + message);
 		if (message.charAt(0) == '#')
 			try
 			{
@@ -44,9 +43,11 @@ public class MyServer
 			}
 			catch (NumberFormatException ex)
 			{
-				// Send the message with a \ at the front so the client doesn't get confused
-				message = "\\" + message;
+				// The message doesn't contain a number after all, just send it to clients
 			}
+		
+		message = timestamp(receiver.toString() + ": " + message);
+		gui.addLog(message);
 		
 		for (ClientHandler client : clientList)
 		{
@@ -56,7 +57,19 @@ public class MyServer
 	
 	public void addLog(String log)
 	{
-		gui.addLog(new SimpleDateFormat("<yyyy/MM/dd HH:mm:ss> ").format(new Date()) + log);
+		gui.addLog(timestamp(log));
+	}
+	
+	// ==================== PRIVATE METHODS ====================
+	
+	private String timestamp()
+	{
+		return new SimpleDateFormat("<yyyy/MM/dd HH:mm:ss> ").format(new Date());
+	}
+	
+	private String timestamp(String str)
+	{
+		return timestamp() + str;
 	}
 	
 	private String[] generateClientArray()
@@ -68,6 +81,8 @@ public class MyServer
 		}
 		return temp;
 	}
+	
+	// =========================================================
 	
 	public static void main(String[] args)
 	{
@@ -96,18 +111,20 @@ public class MyServer
 		}
 		catch (IOException e)
 		{
+			server.addLog("Server crashed");
 			System.out.println(e.getMessage());
 		}
 		finally
 		{
-			// System.out.println("Bye");
+			server.addLog("Bye");
 			if (serverSock != null)
 				try
 				{
-					serverSock.close() ;
+					serverSock.close();
 				}
 				catch (IOException e)
 				{
+					server.addLog("Server craashed");
 					e.printStackTrace();
 				}
 		}

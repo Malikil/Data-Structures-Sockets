@@ -12,12 +12,13 @@ public class ServerGUI extends JFrame
 	private JLabel serverLogLabel, sortedListLabel, clientListLabel;
 	//Bot
 	private JTextArea serverLogArea;
-	private JList<String> sortedListDisplay, clientList;
+	private DefaultListModel<Integer> sortedListMod;
+	private JList<Integer> sortedListDisplay;
+	private JList<String> clientList;
 	private JScrollPane logPane, listPane, clientPane;
 	//Other
 	private JLabel broadcastLabel;
 	private JTextField broadcastField;
-	private ArrayList<Integer> sortedList;
 	
 	public ServerGUI()
 	{
@@ -40,7 +41,7 @@ public class ServerGUI extends JFrame
 		attach(ipField,30,30,250,20);
 		ipField.setEditable(false);
 		
-		portField = new JTextField();
+		portField = new JTextField("8000");
 		attach(portField,333,30,100,20);
 		portField.setEditable(false);
 		
@@ -61,7 +62,8 @@ public class ServerGUI extends JFrame
 		logPane = new JScrollPane(serverLogArea);
 		attach(logPane,10,75,500,500);
 		
-		sortedListDisplay = new JList<>();
+		sortedListMod = new DefaultListModel<>();
+		sortedListDisplay = new JList<>(sortedListMod);
 		listPane = new JScrollPane(sortedListDisplay);
 		attach(listPane,525,75,100,500);
 		
@@ -76,9 +78,6 @@ public class ServerGUI extends JFrame
 		
 		broadcastField = new JTextField();
 		attach(broadcastField,10,600,500,20);
-		
-		// ========== MISC VARIABLES ==========
-		sortedList = new ArrayList<>();
 	}
 	
 	public void attach(Component c, int x, int y, int w, int h)
@@ -104,19 +103,19 @@ public class ServerGUI extends JFrame
 	
 	public Integer[] addListItem(int num)
 	{
-		for (int i = 0; i < sortedList.size(); i++)
+		for (int i = 0; i < sortedListMod.size(); i++)
 		{
-			if (sortedList.get(i).intValue() > num)
+			if (sortedListMod.getElementAt(i).intValue() > num)
 			{
-				sortedList.add(i, new Integer(num));
-				return sortedList.toArray(new Integer[sortedList.size()]);
+				sortedListMod.add(i, num);
+				return (Integer[])sortedListMod.toArray();
 			}
 		}
 		// If this point is reached, the number should be added to the end of
 		// the ArrayList because it's either empty or the number is bigger than
 		// the last value.
-		sortedList.add(num);
-		return sortedList.toArray(new Integer[sortedList.size()]);
+		sortedListMod.addElement(num);
+		return (Integer[])sortedListMod.toArray();
 	}
 	
 	public void setClients(String[] clients)

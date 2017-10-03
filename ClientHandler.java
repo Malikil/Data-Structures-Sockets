@@ -29,7 +29,7 @@ public class ClientHandler implements Runnable
     	String message = "#";
     	for (Integer n : list)
     		message += ("," + n.intValue());
-    	out.print(message);
+    	out.println(message);
     }
 
 	@Override
