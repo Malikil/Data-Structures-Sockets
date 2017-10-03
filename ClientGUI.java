@@ -89,6 +89,9 @@ public class ClientGUI extends JFrame
 			String Port = portInput.getText();
 			
 			try {
+				if(mc!=null)
+				mc.close();
+				
 				mc = new MyClient(IP, Port, ownerGUI);
 				viewStatus.append("Connection made \r\n");
 				mc.start();
@@ -100,7 +103,7 @@ public class ClientGUI extends JFrame
 			}
 			catch (IOException e1)
 			{
-				viewStatus.append("Wrong input \r\n");
+				viewStatus.append("Wrong input or host still asleep \r\n");
 			}
 			catch (NumberFormatException e1)
 			{
@@ -120,7 +123,7 @@ public class ClientGUI extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			
-				String userinput = sendInput.getText(); //We don't need to check for '@' anymore.
+				String userinput = sendInput.getText(); 
 				mc.sendData(userinput);
 				sendInput.setText("");
 			
