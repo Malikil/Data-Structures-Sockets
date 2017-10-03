@@ -21,14 +21,14 @@ public class MyServer
 	{
 		clientList.add(client);
 		addLog(client.toString() + " joined.");
-		gui.setClients(generateClientArray());
+		updateClients();
 	}
 	
 	public void removeClient(ClientHandler client)
 	{
 		clientList.remove(client);
 		addLog(client.toString() + " left.");
-		gui.setClients(generateClientArray());
+		updateClients();
 	}
 	
 	public void messageReceived(String message, ClientHandler receiver)
@@ -60,6 +60,16 @@ public class MyServer
 		gui.addLog(timestamp(log));
 	}
 	
+	public void updateClients()
+	{
+		String[] temp = new String[clientList.size()];
+		for (int i = 0; i < clientList.size(); i++)
+		{
+			temp[i] = clientList.get(i).toString();
+		}
+		gui.setClients(temp);
+	}
+	
 	// ==================== PRIVATE METHODS ====================
 	
 	private String timestamp()
@@ -70,16 +80,6 @@ public class MyServer
 	private String timestamp(String str)
 	{
 		return timestamp() + str;
-	}
-	
-	private String[] generateClientArray()
-	{
-		String[] temp = new String[clientList.size()];
-		for (int i = 0; i < clientList.size(); i++)
-		{
-			temp[i] = clientList.get(i).toString();
-		}
-		return temp;
 	}
 	
 	// =========================================================
@@ -97,16 +97,18 @@ public class MyServer
 			
 			Socket connectionSock;
 			ClientHandler ch;
-			int id = 0;
+			short id = 1;
 			while(true)
 			{
 				server.addLog("Waiting for a client");
 				connectionSock = serverSock.accept();
-				server.addLog("Server welcomes client # : " + (++id));
+				server.addLog("Server welcomes client #" + id);
 				ch = new ClientHandler(connectionSock, id, server);
 				server.addClient(ch);
 				Thread t = new Thread(ch);
 				t.start();
+				if (++id < 1)
+					id = 1;
 			}
 		}
 		catch (IOException e)
