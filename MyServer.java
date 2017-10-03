@@ -2,9 +2,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.DataOutputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.io.IOException;
 
 public class MyServer
@@ -22,20 +20,25 @@ public class MyServer
 	public void addClient(ClientHandler client)
 	{
 		clientList.add(client);
+		addLog(client.toString() + " joined.");
+		gui.setClients(clientList.toArray(new String[clientList.size()]));
 	}
 	
 	public void removeClient(ClientHandler client)
 	{
 		clientList.remove(client);
+		addLog(client.toString() + " left.");
+		gui.setClients(clientList.toArray(new String[clientList.size()]));
 	}
 	
 	public void messageReceived(String message, ClientHandler receiver)
 	{
+		gui.addLog(receiver.toString() + ": " + message);
 		if (message.charAt(0) == '#')
 			try
 			{
 				int num = Integer.parseInt(message.substring(1));
-				int[] newList = { num }; // gui.updateList(num);
+				Integer[] newList = gui.addListItem(num);
 				for (ClientHandler client : clientList)
 					client.sendList(newList);
 			}
@@ -52,6 +55,11 @@ public class MyServer
 		}
 	}
 	
+	public void addLog(String log)
+	{
+		gui.addLog(new SimpleDateFormat("<yyyy/MM/dd HH:mm:ss> ").format(new Date()) + log);
+	}
+	
 	public static void main(String[] args)
 	{
 		MyServer server = new MyServer();
@@ -60,7 +68,7 @@ public class MyServer
 		try
 		{
 			final int PORT = 8000;
-			System.out.println("Waiting for a connection on port " + PORT);
+			server.addLog("Waiting for a connection on port " + PORT);
 			serverSock = new ServerSocket(PORT);
 			
 			Socket connectionSock;
@@ -68,14 +76,13 @@ public class MyServer
 			int id = 0;
 			while(true)
 			{
-				System.out.println("Waiting for a client");
+				server.addLog("Waiting for a client");
 				connectionSock = serverSock.accept();
-				System.out.println("Server welcomes client # : " + (++id));
+				server.addLog("Server welcomes client # : " + (++id));
 				ch = new ClientHandler(connectionSock, id, server);
 				server.addClient(ch);
 				Thread t = new Thread(ch);
 				t.start();
-				// TODO display clients in gui
 			}
 		}
 		catch (IOException e)
@@ -84,7 +91,7 @@ public class MyServer
 		}
 		finally
 		{
-			System.out.println("Bye");
+			// System.out.println("Bye");
 			if (serverSock != null)
 				try
 				{

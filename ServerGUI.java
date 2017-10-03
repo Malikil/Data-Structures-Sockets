@@ -124,4 +124,9 @@ public class ServerGUI extends JFrame
 		sortedList.add(num);
 		return (Integer[])sortedList.toArray();
 	}
+	
+	public void setClients(String[] clients)
+	{
+		clientList.setListData(clients);
+	}
 }

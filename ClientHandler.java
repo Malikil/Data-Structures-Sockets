@@ -24,18 +24,18 @@ public class ClientHandler implements Runnable
     	out.println(message);
     }
     
-    public void sendList(int[] list)
+    public void sendList(Integer[] list)
     {
     	String message = "#";
-    	for (int n : list)
-    		message += ("," + n);
+    	for (Integer n : list)
+    		message += ("," + n.intValue());
     	out.print(message);
     }
 
 	@Override
 	public void run()
 	{
-		System.out.println("Building connection with client# " + id + " at " + socket);
+		parentServer.addLog("Building connection with client# " + id + " at " + socket);
 		try
 		{
 			InputStreamReader isr = new InputStreamReader(socket.getInputStream());
@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable
             out = new PrintWriter(socket.getOutputStream(), true);
 
             // Send a welcome message to the client.
-            out.println("Welcome Client # " + id);
+            out.println("Welcome Client #" + id);
             out.println("Enter @ to quit");
             
 
@@ -66,7 +66,7 @@ public class ClientHandler implements Runnable
         }
 		catch (IOException e)
 		{
-            System.out.println("Error client# " + id + ": " + e);
+            System.out.println("Error client #" + id + ": " + e);
         }
 		finally
 		{
@@ -76,9 +76,15 @@ public class ClientHandler implements Runnable
             }
             catch (IOException e)
             {
-                System.out.println("Client # :" + id + " ... Couldn't close a socket");
+                System.out.println("Client # : " + id + " ... Couldn't close a socket");
             }
-            System.out.println("client# " + id + " left");
+            // System.out.println("client #" + id + " left");
         }
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Client #" + id;
 	}
 }
