@@ -109,14 +109,14 @@ public class ServerGUI extends JFrame
 			if (sortedList.get(i).intValue() > num)
 			{
 				sortedList.add(i, new Integer(num));
-				return (Integer[])sortedList.toArray();
+				return sortedList.toArray(new Integer[sortedList.size()]);
 			}
 		}
 		// If this point is reached, the number should be added to the end of
 		// the ArrayList because it's either empty or the number is bigger than
 		// the last value.
 		sortedList.add(num);
-		return (Integer[])sortedList.toArray();
+		return sortedList.toArray(new Integer[sortedList.size()]);
 	}
 	
 	public void setClients(String[] clients)

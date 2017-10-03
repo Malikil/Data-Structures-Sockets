@@ -33,7 +33,7 @@ public class MyServer
 	
 	public void messageReceived(String message, ClientHandler receiver)
 	{
-		gui.addLog(receiver.toString() + ": " + message);
+		addLog(receiver.toString() + ": " + message);
 		if (message.charAt(0) == '#')
 			try
 			{
@@ -50,8 +50,7 @@ public class MyServer
 		
 		for (ClientHandler client : clientList)
 		{
-			if (client != receiver)
-				client.sendMessage(message);
+			client.sendMessage(message);
 		}
 	}
 	
