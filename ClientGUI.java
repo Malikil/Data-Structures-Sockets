@@ -6,6 +6,11 @@ import java.net.UnknownHostException;
 
 import javax.swing.*;
 
+public static void main(String[] args)
+{
+	ClientGUI gui = new ClientGUI();
+	gui.setVisible(true);
+}
 
 public class ClientGUI extends JFrame {
 
@@ -43,8 +48,6 @@ public class ClientGUI extends JFrame {
 	    attach(sendInput, 80, 570, 580, 30);
 	    attach(sendButton, 760,570, 200,30);
 	    sendButton.addActionListener(new sendButtonListener());
-	    setVisible(true);
-	
 	}
 	
 	public void attach(Component a, int b, int c, int d, int e )
