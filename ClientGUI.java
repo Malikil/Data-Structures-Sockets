@@ -6,13 +6,13 @@ import java.net.UnknownHostException;
 
 import javax.swing.*;
 
-public static void main(String[] args)
+public class ClientGUI extends JFrame
 {
-	ClientGUI gui = new ClientGUI();
-	gui.setVisible(true);
-}
-
-public class ClientGUI extends JFrame {
+	public static void main(String[] args)
+	{
+		ClientGUI gui = new ClientGUI();
+		gui.setVisible(true);
+	}
 
 	private JLabel ipLabel = new JLabel("IP");
 	private JLabel portLabel = new JLabel("PORT");
