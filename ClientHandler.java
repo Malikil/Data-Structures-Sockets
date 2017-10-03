@@ -8,11 +8,12 @@ public class ClientHandler implements Runnable
 {
 	private MyServer parentServer;
 	private Socket socket;
-    private int id;
+    private short id;
     private PrintWriter out;
     private BufferedReader in;
+    private String nick = null;
 
-    public ClientHandler(Socket socket, int id, MyServer server)
+    public ClientHandler(Socket socket, short id, MyServer server)
     {
         this.socket = socket;
         this.id = id;
@@ -24,18 +25,18 @@ public class ClientHandler implements Runnable
     	out.println(message);
     }
     
-    public void sendList(int[] list)
+    public void sendList(Integer[] list)
     {
     	String message = "#";
-    	for (int n : list)
-    		message += ("," + n);
-    	out.print(message);
+    	for (Integer n : list)
+    		message += ("," + n.intValue());
+    	out.println(message);
     }
 
 	@Override
 	public void run()
 	{
-		System.out.println("Building connection with client# " + id + " at " + socket);
+		parentServer.addLog("Building connection with client# " + id + " at " + socket);
 		try
 		{
 			InputStreamReader isr = new InputStreamReader(socket.getInputStream());
@@ -45,7 +46,7 @@ public class ClientHandler implements Runnable
             out = new PrintWriter(socket.getOutputStream(), true);
 
             // Send a welcome message to the client.
-            out.println("Welcome Client # " + id);
+            out.println("Welcome Client #" + id + ". You can use /nick to change your nickname.");
             out.println("Enter @ to quit");
             
 
@@ -59,14 +60,28 @@ public class ClientHandler implements Runnable
                 	parentServer.removeClient(this);
                     break;
                 }
-                
-                parentServer.messageReceived(msg, this);
-                // System.out.println("Message from client #" + id + ", [" + msg + "]");
+                else if (msg.startsWith("/nick"))
+                	if (msg.equals("/nick"))
+                	{
+                		nick = null;
+                		parentServer.updateClients();
+                	}
+                	else if (msg.length() < 21)
+                	{
+                		nick = msg.substring(6);
+                		if (nick.equals(""))
+                			nick = null;
+                		parentServer.updateClients();
+                	}
+                	else
+                		out.println("Nickname must be less than 15 characters");
+                else
+                	parentServer.messageReceived(msg, this);
             }
         }
 		catch (IOException e)
 		{
-            System.out.println("Error client# " + id + ": " + e);
+            System.out.println("Error client #" + id + ": " + e);
         }
 		finally
 		{
@@ -76,9 +91,18 @@ public class ClientHandler implements Runnable
             }
             catch (IOException e)
             {
-                System.out.println("Client # :" + id + " ... Couldn't close a socket");
+                System.out.println("Client # : " + id + " ... Couldn't close a socket");
             }
-            System.out.println("client# " + id + " left");
+            // System.out.println("client #" + id + " left");
         }
+	}
+	
+	@Override
+	public String toString()
+	{
+		if (nick == null)
+			return "Client #" + id;
+		else
+			return nick;
 	}
 }

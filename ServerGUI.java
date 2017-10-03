@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class ServerGUI extends JFrame
@@ -10,7 +12,9 @@ public class ServerGUI extends JFrame
 	private JLabel serverLogLabel, sortedListLabel, clientListLabel;
 	//Bot
 	private JTextArea serverLogArea;
-	private JList sortedList, clientList;
+	private DefaultListModel<Integer> sortedListMod;
+	private JList<Integer> sortedListDisplay;
+	private JList<String> clientList;
 	private JScrollPane logPane, listPane, clientPane;
 	//Other
 	private JLabel broadcastLabel;
@@ -37,7 +41,7 @@ public class ServerGUI extends JFrame
 		attach(ipField,30,30,250,20);
 		ipField.setEditable(false);
 		
-		portField = new JTextField();
+		portField = new JTextField("8000");
 		attach(portField,333,30,100,20);
 		portField.setEditable(false);
 		
@@ -58,11 +62,12 @@ public class ServerGUI extends JFrame
 		logPane = new JScrollPane(serverLogArea);
 		attach(logPane,10,75,500,500);
 		
-		sortedList = new JList();
-		listPane = new JScrollPane(sortedList);
+		sortedListMod = new DefaultListModel<>();
+		sortedListDisplay = new JList<>(sortedListMod);
+		listPane = new JScrollPane(sortedListDisplay);
 		attach(listPane,525,75,100,500);
 		
-		clientList = new JList();
+		clientList = new JList<>();
 		clientPane = new JScrollPane(clientList);
 		attach(clientPane,800,75,150,500);
 		
@@ -73,7 +78,6 @@ public class ServerGUI extends JFrame
 		
 		broadcastField = new JTextField();
 		attach(broadcastField,10,600,500,20);
-		
 	}
 	
 	public void attach(Component c, int x, int y, int w, int h)
@@ -82,14 +86,40 @@ public class ServerGUI extends JFrame
 		c.setBounds(x, y, w,h);
 	}
 	
-	public static void main(String[] arg)
-	{
-		ServerGUI serv = new ServerGUI();
-		serv.setVisible(true);
-	}
-	
 	public void setIP(String ip)
 	{
-		
+		ipField.setText(ip);
+	}
+	
+	public void setPort(String port)
+	{
+		portField.setText(port);
+	}
+	
+	public void addLog(String log)
+	{
+		serverLogArea.append(log + "\n");
+	}
+	
+	public Integer[] addListItem(int num)
+	{
+		for (int i = 0; i < sortedListMod.size(); i++)
+		{
+			if (sortedListMod.getElementAt(i).intValue() > num)
+			{
+				sortedListMod.add(i, num);
+				return (Integer[])sortedListMod.toArray();
+			}
+		}
+		// If this point is reached, the number should be added to the end of
+		// the ArrayList because it's either empty or the number is bigger than
+		// the last value.
+		sortedListMod.addElement(num);
+		return (Integer[])sortedListMod.toArray();
+	}
+	
+	public void setClients(String[] clients)
+	{
+		clientList.setListData(clients);
 	}
 }
