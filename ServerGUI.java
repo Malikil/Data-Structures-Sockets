@@ -108,14 +108,20 @@ public class ServerGUI extends JFrame
 			if (sortedListMod.getElementAt(i).intValue() > num)
 			{
 				sortedListMod.add(i, num);
-				return (Integer[])sortedListMod.toArray();
+				Integer[] temp = new Integer[sortedListMod.size()];
+				for (int j = 0; j < sortedListMod.size(); j++)
+					temp[j] = sortedListMod.get(j);
+				return temp;
 			}
 		}
 		// If this point is reached, the number should be added to the end of
 		// the ArrayList because it's either empty or the number is bigger than
 		// the last value.
 		sortedListMod.addElement(num);
-		return (Integer[])sortedListMod.toArray();
+		Integer[] temp = new Integer[sortedListMod.size()];
+		for (int j = 0; j < sortedListMod.size(); j++)
+			temp[j] = sortedListMod.get(j);
+		return temp;
 	}
 	
 	public void setClients(String[] clients)
