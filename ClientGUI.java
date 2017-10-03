@@ -31,6 +31,7 @@ public class ClientGUI extends JFrame
 	private JList<String> clientList = new JList<String>();
 	private JScrollPane clientPane = new JScrollPane(clientList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	MyClient mc = null;
+	ClientGUI self = this;
 
 	public ClientGUI()
 	{
@@ -53,6 +54,8 @@ public class ClientGUI extends JFrame
 	    attach(sendButton, 760,570, 200,30);
 	    attach(clientPane, 760, 90, 200, 450);
 	    sendButton.addActionListener(new sendButtonListener());
+	    
+	    self.getRootPane().setDefaultButton(connectButton);
 	}
 	
 	public void setNumberList(String[] list)
@@ -107,6 +110,8 @@ public class ClientGUI extends JFrame
 			{
 				viewStatus.append("Your input out of range");
 			}
+			
+			self.getRootPane().setDefaultButton(sendButton);
 		}
 	}
 	
