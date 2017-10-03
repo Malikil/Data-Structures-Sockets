@@ -15,12 +15,9 @@ public class MyClient extends Thread
 	private PrintWriter pw = null;
 	private Socket connectionSock = null;
 	public boolean ok_connect = true;
-	private int id;
+	private ClientGUI gui;
 
-	JTextArea v;
-	JList<String> z;
-	
-	public MyClient(String host, String vport, JTextArea a, JList<String> b) throws UnknownHostException, IOException {
+	public MyClient(String host, String vport, ClientGUI gui) throws UnknownHostException, IOException {
 		String hostname = host;
 		int port = Integer.parseInt(vport);
 		v = a; //Assigns passed values for use in run() method.
@@ -30,8 +27,7 @@ public class MyClient extends Thread
 		InputStreamReader isr = new InputStreamReader(connectionSock.getInputStream());
 		serverInput = new BufferedReader(isr);
 		pw = new PrintWriter(connectionSock.getOutputStream(),true);
-		
-	
+		this.gui = gui;
 	}
 	
 	
@@ -50,13 +46,11 @@ public class MyClient extends Thread
 	public void run() {
 		String serverMsg;
 		
-		
-		
 		// used to listen message from server
-		try {
-			serverMsg = serverInput.readLine(); // assume that the id was the first message sent
-			id = Integer.parseInt(serverMsg.split("#")[1].trim()); 
-			while(true) {
+		try
+		{
+			while(true)
+			{
 				serverMsg = serverInput.readLine(); 
 				if (serverMsg == null)
 				{
@@ -68,17 +62,18 @@ public class MyClient extends Thread
 
 					String[] newList = toList.split(",");
 					
-					z.setListData(newList);
+					gui.setNumberList(newList);
 				}
 				else
 				{
-				v.append("Message Received: " + serverMsg);
+					gui.displayMessage(serverMsg);
 				}
 			}
-		} catch (Exception ex) {
+		}
+		catch (Exception ex)
+		{
 			ok_connect = false;
-			System.out.println(ex);
-			System.out.println("Disconnected from server");
+			gui.displayMessage("Disconnected from server");
 		}
 	}
 }
