@@ -87,12 +87,6 @@ public class ServerGUI extends JFrame
 		c.setBounds(x, y, w,h);
 	}
 	
-	public static void main(String[] arg)
-	{
-		ServerGUI serv = new ServerGUI();
-		serv.setVisible(true);
-	} // Probably safe to remove this completely now
-	
 	public void setIP(String ip)
 	{
 		ipField.setText(ip);
