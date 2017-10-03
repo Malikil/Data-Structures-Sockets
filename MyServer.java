@@ -21,14 +21,14 @@ public class MyServer
 	{
 		clientList.add(client);
 		addLog(client.toString() + " joined.");
-		gui.setClients(clientList.toArray(new String[clientList.size()]));
+		gui.setClients(generateClientArray());
 	}
 	
 	public void removeClient(ClientHandler client)
 	{
 		clientList.remove(client);
 		addLog(client.toString() + " left.");
-		gui.setClients(clientList.toArray(new String[clientList.size()]));
+		gui.setClients(generateClientArray());
 	}
 	
 	public void messageReceived(String message, ClientHandler receiver)
@@ -58,6 +58,16 @@ public class MyServer
 	public void addLog(String log)
 	{
 		gui.addLog(new SimpleDateFormat("<yyyy/MM/dd HH:mm:ss> ").format(new Date()) + log);
+	}
+	
+	private String[] generateClientArray()
+	{
+		String[] temp = new String[clientList.size()];
+		for (int i = 0; i < clientList.size(); i++)
+		{
+			temp[i] = clientList.get(i).toString();
+		}
+		return temp;
 	}
 	
 	public static void main(String[] args)
