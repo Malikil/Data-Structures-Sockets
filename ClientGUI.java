@@ -40,7 +40,7 @@ public class ClientGUI extends JFrame
 	    attach(portLabel, 350,10, 100,30);
 	    attach(portInput, 450,10, 200,30);
 	    attach(connectButton, 760,10, 200,30);
-	    connectButton.addActionListener(new connectButtonListener());
+	    connectButton.addActionListener(new connectButtonListener(this));
 	    attach(statusLabel, 90,50, 80,30);
 	    attach(scroller, 80, 90, 200, 450);
 	    attach(listLabel, 450,50, 40,30);
@@ -48,6 +48,16 @@ public class ClientGUI extends JFrame
 	    attach(sendInput, 80, 570, 580, 30);
 	    attach(sendButton, 760,570, 200,30);
 	    sendButton.addActionListener(new sendButtonListener());
+	}
+	
+	public void setNumberList(String[] list)
+	{
+		viewDisplay.setListData(list);
+	}
+	
+	public void displayMessage(String msg)
+	{
+		viewStatus.append(msg + "\n");
 	}
 	
 	public void attach(Component a, int b, int c, int d, int e )
@@ -58,6 +68,12 @@ public class ClientGUI extends JFrame
 	
 	private class connectButtonListener implements ActionListener
 	{
+		private ClientGUI ownerGUI;
+		connectButtonListener(ClientGUI gui)
+		{
+			ownerGUI = gui;
+		}
+		
 		public void actionPerformed(ActionEvent e)
 		{
 		
@@ -65,29 +81,27 @@ public class ClientGUI extends JFrame
 			String Port = portInput.getText();
 			
 			try {
-				mc = new MyClient(IP, Port, viewStatus, viewDisplay); //Passes JTextArea and JList
+				mc = new MyClient(IP, Port, ownerGUI);
 				viewStatus.append("Connection made \r\n");
 				mc.start();
 				mc.sendData("Hello");
-				
-				
-				
-			} catch (UnknownHostException e1) {
+			}
+			catch (UnknownHostException e1)
+			{
 				viewStatus.append("Your host sucks \r\n");
-			} catch (IOException e1) {
+			}
+			catch (IOException e1)
+			{
 				viewStatus.append("Wrong input \r\n");
-			} catch (NumberFormatException e1)
+			}
+			catch (NumberFormatException e1)
 			{
 				viewStatus.append("Put in numbers man \r\n");
-			} catch (IllegalArgumentException e1)
+			}
+			catch (IllegalArgumentException e1)
 			{
 				viewStatus.append("Your input out of range");
 			}
-			
-			
-			
-			
-			
 		}
 	}
 	

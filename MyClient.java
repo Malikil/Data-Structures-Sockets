@@ -15,11 +15,9 @@ public class MyClient extends Thread
 	private PrintWriter pw = null;
 	private Socket connectionSock = null;
 	public boolean ok_connect = true;
+	private ClientGUI gui;
 
-	JTextArea v;
-	JList<String> z;
-	
-	public MyClient(String host, String vport, JTextArea a, JList<String> b) throws UnknownHostException, IOException {
+	public MyClient(String host, String vport, ClientGUI gui) throws UnknownHostException, IOException {
 		String hostname = host;
 		int port = Integer.parseInt(vport);
 
@@ -28,12 +26,8 @@ public class MyClient extends Thread
 		InputStreamReader isr = new InputStreamReader(connectionSock.getInputStream());
 		serverInput = new BufferedReader(isr);
 		pw = new PrintWriter(connectionSock.getOutputStream(),true);
-		v = a; //Assigns passed values for use in run() method.
-		z = b;
+		this.gui = gui;
 	}
-	
-	
-	
 	
 	public void close() throws IOException {
 		pw.close();
@@ -64,14 +58,16 @@ public class MyClient extends Thread
 
 					String[] newList = toList.split(",");
 					
-					z.setListData(newList);
+					gui.setNumberList(newList);
 				}
 				else
 				{
-					v.append(serverMsg);
+					gui.displayMessage(serverMsg);
 				}
 			}
-		} catch (Exception ex) {
+		}
+		catch (Exception ex)
+		{
 			ok_connect = false;
 		}
 	}
