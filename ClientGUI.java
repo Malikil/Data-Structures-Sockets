@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
 public class ClientGUI extends JFrame
 {
@@ -32,13 +33,15 @@ public class ClientGUI extends JFrame
 	private JScrollPane clientPane = new JScrollPane(clientList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	MyClient mc = null;
 	ClientGUI self = this;
+	DefaultCaret caret = (DefaultCaret)viewStatus.getCaret();
 
 	public ClientGUI()
 	{
 		setSize(1000,700);
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    
+	    viewStatus.setEditable(false);
+	    caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
 	    attach(ipLabel, 10,10, 40,30);
 	    attach(ipInput, 80, 10, 200,30);
 	    attach(portLabel, 350,10, 100,30);
@@ -126,6 +129,7 @@ public class ClientGUI extends JFrame
 				String userinput = sendInput.getText(); 
 				mc.sendData(userinput);
 				sendInput.setText("");
+				caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
 			
 		}
 	}
