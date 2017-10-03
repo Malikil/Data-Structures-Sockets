@@ -15,7 +15,6 @@ public class MyClient extends Thread
 	private PrintWriter pw = null;
 	private Socket connectionSock = null;
 	public boolean ok_connect = true;
-	private int id;
 
 	JTextArea v;
 	JList<String> z;
@@ -31,7 +30,6 @@ public class MyClient extends Thread
 		pw = new PrintWriter(connectionSock.getOutputStream(),true);
 		v = a; //Assigns passed values for use in run() method.
 		z = b;
-	
 	}
 	
 	
@@ -50,13 +48,11 @@ public class MyClient extends Thread
 	public void run() {
 		String serverMsg;
 		
-		
-		
 		// used to listen message from server
-		try {
-			serverMsg = serverInput.readLine(); // assume that the id was the first message sent
-			id = Integer.parseInt(serverMsg.split("#")[1].trim()); 
-			while(true) {
+		try
+		{
+			while(true)
+			{
 				serverMsg = serverInput.readLine(); 
 				if (serverMsg == null)
 				{
@@ -72,7 +68,7 @@ public class MyClient extends Thread
 				}
 				else
 				{
-				v.append("Message Received: " + serverMsg);
+					v.append(serverMsg);
 				}
 			}
 		} catch (Exception ex) {
