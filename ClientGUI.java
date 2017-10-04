@@ -158,18 +158,13 @@ public class ClientGUI extends JFrame
 			String userInput = sendInput.getText();
 			if (!userInput.equals(""))
 			{
-				mc.sendData(userInput);
-				sendInput.setText("");
-				caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
-			}
-			else if (userInput.startsWith("/nick"))
-			{
-				if (userInput.contains(","))
+				if (userInput.startsWith("/nick") && userInput.contains(","))
 					viewStatus.append("You cannot use commas in your nickname\n");
 				else
 				{
 					mc.sendData(userInput);
 					sendInput.setText("");
+					caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
 				}
 			}
 		}
