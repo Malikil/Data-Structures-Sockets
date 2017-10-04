@@ -49,13 +49,13 @@ public class ClientGUI extends JFrame
 	    attach(connectButton, 760,10, 200,30);
 	    connectButton.addActionListener(new connectButtonListener(this));
 	    attach(statusLabel, 90,50, 80,30);
-	    attach(scroller, 80, 90, 305, 450);
-	    attach(listLabel, 450,50, 40,30);
+	    attach(scroller, 80, 90, 570, 450);
+	    attach(listLabel, 760,280, 40,30);
 	    attach(usersLabel, 760,50, 90,30);
-	    attach(scroller2, 450, 90, 200, 450);
-	    attach(sendInput, 80, 570, 580, 30);
+	    attach(scroller2, 760, 320, 200, 220);
+	    attach(sendInput, 80, 570, 570, 30);
 	    attach(sendButton, 760,570, 200,30);
-	    attach(clientPane, 760, 90, 200, 450);
+	    attach(clientPane, 760, 90, 200, 180);
 	    sendButton.addActionListener(new sendButtonListener());
 	    
 	    self.getRootPane().setDefaultButton(connectButton);
