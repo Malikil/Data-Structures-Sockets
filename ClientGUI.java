@@ -151,14 +151,13 @@ public class ClientGUI extends JFrame
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			
-				String userinput = sendInput.getText(); 
+			String userinput = sendInput.getText();
+			if (!userinput.equals(""))
+			{
 				mc.sendData(userinput);
 				sendInput.setText("");
 				caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
-			
+			}
 		}
 	}
-	
-	
 }
