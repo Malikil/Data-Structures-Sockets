@@ -71,7 +71,6 @@ public class MyClient extends Thread
 		catch (Exception ex)
 		{
 			ok_connect = false;
-			gui.displayMessage("Disconnected from server");
 		}
 	}
 }
