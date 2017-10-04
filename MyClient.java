@@ -1,9 +1,6 @@
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.swing.JList;
-import javax.swing.JTextArea;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -28,20 +25,20 @@ public class MyClient extends Thread
 		this.gui = gui;
 	}
 	
-	
-	
-	
-	public void close() throws IOException {
+	public void close() throws IOException
+	{
 		pw.close();
 		serverInput.close();
 		connectionSock.close();
 	}
-	public void sendData(String msg) {
+	
+	public void sendData(String msg)
+	{
 		pw.println(msg); 
 	}
 	
-	
-	public void run() {
+	public void run()
+	{
 		String serverMsg;
 		
 		// used to listen message from server
@@ -50,10 +47,7 @@ public class MyClient extends Thread
 			while(true)
 			{
 				serverMsg = serverInput.readLine(); 
-				if (serverMsg == null)
-				{
-					break;
-				}
+				if (serverMsg == null) break;
 				else if(serverMsg.charAt(0) == '#') //Used to filter messages meant to update list.
 				{
 					String toList = serverMsg.replaceFirst("#,","");
@@ -61,6 +55,12 @@ public class MyClient extends Thread
 					String[] newList = toList.split(",");
 					
 					gui.setNumberList(newList);
+				}
+				else if (serverMsg.charAt(0) == '~')
+				{
+					String rawList = serverMsg.replaceFirst("~,", "");
+					String[] clientList = rawList.split(",");
+					gui.setClientList(clientList);
 				}
 				else
 				{

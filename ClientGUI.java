@@ -67,6 +67,11 @@ public class ClientGUI extends JFrame
 		viewDisplay.setListData(list);
 	}
 	
+	public void setClientList(String[] list)
+	{
+		clientList.setListData(list);
+	}
+	
 	public void displayMessage(String msg)
 	{
 		viewStatus.append(msg + "\n");
@@ -94,9 +99,10 @@ public class ClientGUI extends JFrame
 				String IP = ipInput.getText();
 				String Port = portInput.getText();
 			
-				try {
+				try
+				{
 					mc = new MyClient(IP, Port, ownerGUI);
-					viewStatus.append("Connection made \r\n");
+					viewStatus.append("Connection made\n");
 					mc.start();
 					mc.sendData("Hello");
 					sendInput.setEditable(true);
@@ -105,7 +111,7 @@ public class ClientGUI extends JFrame
 					self.getRootPane().setDefaultButton(sendButton);
 					connectButton.setText("Disconnect");
 					connected = true;
-					}
+				}
 				catch (UnknownHostException e1)
 				{
 					viewStatus.append("Your host sucks \r\n");
@@ -122,10 +128,7 @@ public class ClientGUI extends JFrame
 				{
 					viewStatus.append("Your input out of range");
 				}
-				
-				
 			}
-			
 			else
 			{
 				try {
@@ -138,11 +141,12 @@ public class ClientGUI extends JFrame
 					portInput.setEditable(true);
 					connected = false;
 					
-				} catch (IOException e1) {
+				}
+				catch (IOException e1)
+				{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
 			}
 		}
 	}
@@ -151,12 +155,22 @@ public class ClientGUI extends JFrame
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			String userinput = sendInput.getText();
-			if (!userinput.equals(""))
+			String userInput = sendInput.getText();
+			if (!userInput.equals(""))
 			{
-				mc.sendData(userinput);
+				mc.sendData(userInput);
 				sendInput.setText("");
 				caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
+			}
+			else if (userInput.startsWith("/nick"))
+			{
+				if (userInput.contains(","))
+					viewStatus.append("You cannot use commas in your nickname\n");
+				else
+				{
+					mc.sendData(userInput);
+					sendInput.setText("");
+				}
 			}
 		}
 	}

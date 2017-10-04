@@ -68,6 +68,8 @@ public class MyServer
 			temp[i] = clientList.get(i).toString();
 		}
 		gui.setClients(temp);
+		for (ClientHandler client : clientList)
+			client.sendClientList(temp);
 	}
 	
 	// ==================== PRIVATE METHODS ====================

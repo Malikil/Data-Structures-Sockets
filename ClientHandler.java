@@ -32,6 +32,14 @@ public class ClientHandler implements Runnable
     		message += ("," + n.intValue());
     	out.println(message);
     }
+    
+    public void sendClientList(String[] clientNames)
+    {
+    	String message = "~";
+    	for (String name : clientNames)
+    		message += "," + name;
+    	out.println(message);
+    }
 
 	@Override
 	public void run()
@@ -56,10 +64,7 @@ public class ClientHandler implements Runnable
             {
                 msg = in.readLine();
                 if (msg == null || msg.equals("@"))
-                {
-                	parentServer.removeClient(this);
                     break;
-                }
                 else if (msg.startsWith("/nick"))
                 	if (msg.equals("/nick"))
                 	{
@@ -88,6 +93,7 @@ public class ClientHandler implements Runnable
             try
             {
                 socket.close();
+                parentServer.removeClient(this);
             }
             catch (IOException e)
             {
