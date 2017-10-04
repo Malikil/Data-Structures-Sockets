@@ -106,9 +106,9 @@ public class MyServer
 				connectionSock = serverSock.accept();
 				server.addLog("Server welcomes client #" + id);
 				ch = new ClientHandler(connectionSock, id, server);
-				server.addClient(ch);
 				Thread t = new Thread(ch);
 				t.start();
+				server.addClient(ch);
 				if (++id < 1)
 					id = 1;
 			}
