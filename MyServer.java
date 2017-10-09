@@ -3,9 +3,11 @@ import java.util.Date;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class MyServer
+public class MyServer implements ActionListener
 {
 	private ArrayList<ClientHandler> clientList;
 	private ServerGUI gui;
@@ -13,7 +15,7 @@ public class MyServer
 	public MyServer()
 	{
 		clientList = new ArrayList<>();
-		gui = new ServerGUI();
+		gui = new ServerGUI(this);
 		gui.setVisible(true);
 	}
 	
@@ -132,5 +134,12 @@ public class MyServer
 					e.printStackTrace();
 				}
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		for (ClientHandler client : clientList)
+			client.sendMessage(e.getActionCommand());
 	}
 }

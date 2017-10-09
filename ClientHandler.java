@@ -38,6 +38,7 @@ public class ClientHandler implements Runnable
     	String message = "~";
     	for (String name : clientNames)
     		message += "," + name;
+    	while (out == null && !socket.isClosed());
     	out.println(message);
     }
 
@@ -55,7 +56,7 @@ public class ClientHandler implements Runnable
 
             // Send a welcome message to the client.
             out.println("Welcome Client #" + id + ". You can use /nick to change your nickname.");
-            out.println("Enter @ to quit");
+            out.println("Enter /quit to quit");
             
 
             String msg;
@@ -63,7 +64,7 @@ public class ClientHandler implements Runnable
             while (true)
             {
                 msg = in.readLine();
-                if (msg == null || msg.equals("@"))
+                if (msg == null || msg.equals("/quit"))
                     break;
                 else if (msg.startsWith("/nick"))
                 	if (msg.equals("/nick"))

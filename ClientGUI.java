@@ -140,7 +140,8 @@ public class ClientGUI extends JFrame
 					ipInput.setEditable(true);
 					portInput.setEditable(true);
 					connected = false;
-					
+					clientList.setListData(new String[0]);
+					viewDisplay.setListData(new String[0]);
 				}
 				catch (IOException e1)
 				{

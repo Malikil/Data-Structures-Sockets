@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.util.ArrayList;
-
 import javax.swing.*;
 
 public class ServerGUI extends JFrame
@@ -20,7 +18,7 @@ public class ServerGUI extends JFrame
 	private JLabel broadcastLabel;
 	private JTextField broadcastField;
 	
-	public ServerGUI()
+	public ServerGUI(MyServer parent)
 	{
 		this.setLayout(null);
 		this.setBounds(10,10,1000,700);
@@ -77,6 +75,7 @@ public class ServerGUI extends JFrame
 		attach(broadcastLabel,10,580,500,20);
 		
 		broadcastField = new JTextField();
+		broadcastField.addActionListener(parent);
 		attach(broadcastField,10,600,500,20);
 	}
 	
