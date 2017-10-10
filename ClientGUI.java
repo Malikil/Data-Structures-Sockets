@@ -166,6 +166,7 @@ public class ClientGUI extends JFrame
 					mc.sendData(userInput);
 					sendInput.setText("");
 					caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
+					viewStatus.setCaretPosition(DefaultCaret.OUT_BOTTOM);
 				}
 			}
 		}
