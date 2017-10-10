@@ -8,16 +8,15 @@ public class ClientHandler implements Runnable
 {
 	private MyServer parentServer;
 	private Socket socket;
-    private short id;
     private PrintWriter out;
     private BufferedReader in;
     private String nick = null;
 
-    public ClientHandler(Socket socket, short id, MyServer server)
+    public ClientHandler(Socket socket, MyServer server, String initialNick)
     {
         this.socket = socket;
-        this.id = id;
         parentServer = server;
+        nick = initialNick;
     }
     
     public void sendMessage(String message)
@@ -45,7 +44,7 @@ public class ClientHandler implements Runnable
 	@Override
 	public void run()
 	{
-		parentServer.addLog("Building connection with client# " + id + " at " + socket);
+		parentServer.addLog("Building connection with " + nick + " at " + socket);
 		try
 		{
 			InputStreamReader isr = new InputStreamReader(socket.getInputStream());
@@ -55,7 +54,7 @@ public class ClientHandler implements Runnable
             out = new PrintWriter(socket.getOutputStream(), true);
 
             // Send a welcome message to the client.
-            out.println("Welcome Client #" + id + ". You can use /nick to change your nickname.");
+            out.println("Welcome " + nick + ". You can use /nick to change your nickname.");
 
             String msg;
             // waiting for client to send message
@@ -65,20 +64,30 @@ public class ClientHandler implements Runnable
                 if (msg == null)
                     break;
                 else if (msg.startsWith("/nick"))
+                {
+                	String oldNick = nick;
                 	if (msg.equals("/nick"))
                 	{
-                		nick = null;
+                		nick = parentServer.getAvailableNick();
+                		parentServer.changeNick(oldNick, nick);
                 		parentServer.updateClients();
                 	}
                 	else if (msg.length() < 21)
                 	{
                 		nick = msg.substring(6);
                 		if (nick.equals(""))
-                			nick = null;
-                		parentServer.updateClients();
+                			nick = parentServer.getAvailableNick();
+                		if (parentServer.changeNick(oldNick, nick) == 0)
+                		{
+                			nick = oldNick;
+                			out.println("Nickname is already in use");
+                		}
+                		else // Not currently checking for if the old name could not be found.
+                			parentServer.updateClients();
                 	}
                 	else
                 		out.println("Nickname must be less than 15 characters");
+                }
                 else if (msg.startsWith("/msg "))
                 {
                 	// Get the username to send the message to
@@ -105,7 +114,7 @@ public class ClientHandler implements Runnable
         }
 		catch (IOException e)
 		{
-            System.out.println("Error client #" + id + ": " + e);
+            System.out.println("Error " + nick + ": " + e);
         }
 		finally
 		{
@@ -116,7 +125,7 @@ public class ClientHandler implements Runnable
             }
             catch (IOException e)
             {
-                System.out.println("Client # : " + id + " ... Couldn't close a socket");
+                System.out.println(nick + " ... Couldn't close a socket");
             }
             // System.out.println("client #" + id + " left");
         }
@@ -125,9 +134,6 @@ public class ClientHandler implements Runnable
 	@Override
 	public String toString()
 	{
-		if (nick == null)
-			return "Client #" + id;
-		else
-			return nick;
+		return nick;
 	}
 }

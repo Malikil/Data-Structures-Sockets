@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -11,17 +12,23 @@ public class MyServer implements ActionListener
 {
 	private ArrayList<ClientHandler> clientList;
 	private ServerGUI gui;
+	private HashSet<String> usedNames;
+	// Be aware, a HashSet isn't synchronized in this implementation. For this
+	// instance I expect it won't cause problems because of what it's being used for
+	// and how it's being accessed, but check here early if problems start to arise.
 	
 	public MyServer()
 	{
 		clientList = new ArrayList<>();
 		gui = new ServerGUI(this);
 		gui.setVisible(true);
+		usedNames = new HashSet<String>();
 	}
 	
 	public void addClient(ClientHandler client)
 	{
 		clientList.add(client);
+		usedNames.add(client.toString());
 		addLog(client.toString() + " joined.");
 		updateClients();
 	}
@@ -29,8 +36,40 @@ public class MyServer implements ActionListener
 	public void removeClient(ClientHandler client)
 	{
 		clientList.remove(client);
+		usedNames.remove(client.toString());
 		addLog(client.toString() + " left.");
 		updateClients();
+	}
+	
+	/**
+	 * Will update which names are currently being used.
+	 * Returns a value code depending on the success of the change:
+	 * 		-1: Could not find the old name
+	 * 		 0: The desired name is already in use
+	 * 		 1: The name was changed successfully
+	 * @param old The old username
+	 * @param updated The desired username
+	 * @return An int indicating the result of the operation
+	 */
+	public int changeNick(String old, String updated)
+	{
+		if (usedNames.contains(updated))
+			return 0;
+		else
+			if (usedNames.remove(old))
+			{
+				usedNames.add(updated);
+				return 1;
+			}
+			else
+				return -1;
+	}
+	
+	public String getAvailableNick()
+	{
+		int i = 0;
+		while (usedNames.contains("Client #" + (++i)));
+		return ("Client #" + i);
 	}
 	
 	public void messageReceived(String message, ClientHandler receiver)
@@ -78,14 +117,9 @@ public class MyServer implements ActionListener
 	
 	public void updateClients()
 	{
-		String[] temp = new String[clientList.size()];
-		for (int i = 0; i < clientList.size(); i++)
-		{
-			temp[i] = clientList.get(i).toString();
-		}
-		gui.setClients(temp);
+		gui.setClients((String[])usedNames.toArray());
 		for (ClientHandler client : clientList)
-			client.sendClientList(temp);
+			client.sendClientList((String[])usedNames.toArray());
 	}
 	
 	// ==================== PRIVATE METHODS ====================
@@ -115,18 +149,15 @@ public class MyServer implements ActionListener
 			
 			Socket connectionSock;
 			ClientHandler ch;
-			short id = 1;
 			while(true)
 			{
 				server.addLog("Waiting for a client");
 				connectionSock = serverSock.accept();
-				server.addLog("Server welcomes client #" + id);
-				ch = new ClientHandler(connectionSock, id, server);
+				server.addLog("Connection accepted.");
+				ch = new ClientHandler(connectionSock, server, server.getAvailableNick());
 				Thread t = new Thread(ch);
 				t.start();
 				server.addClient(ch);
-				if (++id < 1)
-					id = 1;
 			}
 		}
 		catch (IOException e)
@@ -144,7 +175,7 @@ public class MyServer implements ActionListener
 				}
 				catch (IOException e)
 				{
-					server.addLog("Server craashed");
+					server.addLog("Server crashed");
 					e.printStackTrace();
 				}
 		}
