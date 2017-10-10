@@ -100,6 +100,11 @@ public class ServerGUI extends JFrame
 		serverLogArea.append(log + "\n");
 	}
 	
+	public void clearMessageEntry()
+	{
+		broadcastField.setText("");
+	}
+	
 	public Integer[] addListItem(int num)
 	{
 		for (int i = 0; i < sortedListMod.size(); i++)

@@ -57,6 +57,20 @@ public class MyServer implements ActionListener
 		}
 	}
 	
+	public void privateMessage(ClientHandler sender, String target, String message)
+	{
+		for (ClientHandler client : clientList)
+			if (client.toString().equals(target))
+			{
+				client.sendMessage(
+						timestamp("Whisper from " + sender.toString() + ": " + message));
+				sender.sendMessage(
+						timestamp("Whisper to " + target + ": " + message));
+				return;
+			}
+		sender.sendMessage("Could not find user with name \"" + target + "\"");
+	}
+	
 	public void addLog(String log)
 	{
 		gui.addLog(timestamp(log));
@@ -141,5 +155,7 @@ public class MyServer implements ActionListener
 	{
 		for (ClientHandler client : clientList)
 			client.sendMessage(e.getActionCommand());
+		gui.addLog(timestamp(e.getActionCommand()));
+		gui.clearMessageEntry();
 	}
 }

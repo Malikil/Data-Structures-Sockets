@@ -56,15 +56,13 @@ public class ClientHandler implements Runnable
 
             // Send a welcome message to the client.
             out.println("Welcome Client #" + id + ". You can use /nick to change your nickname.");
-            out.println("Enter /quit to quit");
-            
 
             String msg;
             // waiting for client to send message
             while (true)
             {
                 msg = in.readLine();
-                if (msg == null || msg.equals("/quit"))
+                if (msg == null)
                     break;
                 else if (msg.startsWith("/nick"))
                 	if (msg.equals("/nick"))
@@ -81,6 +79,26 @@ public class ClientHandler implements Runnable
                 	}
                 	else
                 		out.println("Nickname must be less than 15 characters");
+                else if (msg.startsWith("/msg "))
+                {
+                	// Get the username to send the message to
+                	String message = msg.substring(5);
+                	String targetUser;
+                	if (message.startsWith("\""))
+                	{
+                		// Find the second quote
+                		int split = message.substring(1).indexOf("\" ");
+                		targetUser = message.substring(1, split);
+                		message = message.substring(split + 1);
+                	}
+                	else
+                	{
+                		int split = message.indexOf(" ");
+                		targetUser = message.substring(0, split);
+                		message = message.substring(split + 1);
+                	}
+                	parentServer.privateMessage(this, targetUser, message);
+                }
                 else
                 	parentServer.messageReceived(msg, this);
             }
