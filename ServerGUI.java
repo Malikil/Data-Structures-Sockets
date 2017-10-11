@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
 public class ServerGUI extends JFrame
 {
@@ -57,6 +58,8 @@ public class ServerGUI extends JFrame
 		// ========== BOT PANEL ===========
 
 		serverLogArea = new JTextArea();
+		DefaultCaret caret = (DefaultCaret)serverLogArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		logPane = new JScrollPane(serverLogArea);
 		attach(logPane,10,75,500,500);
 		
